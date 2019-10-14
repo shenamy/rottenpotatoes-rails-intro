@@ -11,8 +11,12 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
     @sort = params[:sort]
+    @all_ratings = Movie.ratings.keys
+
+    @selected = params[:ratings] || Movie.ratings
+
+    @movies = Movie.with_ratings(@selected.keys)
     @movies = @movies.order(@sort)
     if @sort == "title"
       @style_title_header = "hilite bg-warning"
